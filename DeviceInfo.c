@@ -29,22 +29,22 @@ int main(int argc, char const *argv[])
 
     // Investigate each platform
     for (int i = 0; i < platformNums; ++i) {
-        cl_char string[10240] = {0};
+        cl_char string[100];
         // Print the platform name
         err = clGetPlatformInfo(platform[i], CL_PLATFORM_NAME, sizeof(string),
-                                &string, NULL);
+                                string, NULL);
         checkError(err, "Getting platform name");
         printf("Platform: %s\n", string);
 
         // Print out the platform vendor
         err = clGetPlatformInfo(platform[i], CL_PLATFORM_VENDOR, sizeof(string),
-                                &string, NULL);
+                                string, NULL);
         checkError(err, "Getting platform vendor");
         printf("Vendor: %s\n", string);
 
         // Print out the platform OpenCL version
         err = clGetPlatformInfo(platform[i], CL_PLATFORM_VERSION,
-                                sizeof(string), &string, NULL);
+                                sizeof(string), string, NULL);
         checkError(err, "Getting platform OpenCL version");
         printf("Version: %s\n", string);
 
@@ -64,18 +64,22 @@ int main(int argc, char const *argv[])
         // Investigate each device
         for (int j = 0; j < devicesNum; ++j) {
             printf("\t----------------------------------------------------\n");
-
             // Get device name
             err = clGetDeviceInfo(device[j], CL_DEVICE_NAME, sizeof(string),
-                                  &string, NULL);
+                                  string, NULL);
             checkError(err, "Getting device name");
             printf("\t\tName: %s\n", string);
 
             // Get device OpenCL version
             err = clGetDeviceInfo(device[j], CL_DEVICE_OPENCL_C_VERSION,
-                                  sizeof(string), &string, NULL);
+                                  sizeof(string), string, NULL);
             checkError(err, "Getting device OpenCL C version");
-            printf("\t\tVersion: %s\n", string);
+            printf("\t\tDevice Version: %s\n", string);
+
+            err = clGetDeviceInfo(device[i], CL_DEVICE_VERSION, sizeof(string),
+                                  string, NULL);
+            checkError(err, "Getting device version");
+            printf("\t\tSoftware Version: %s\n", string);
 
             // Get Max. Compute Units
             cl_uint num;
