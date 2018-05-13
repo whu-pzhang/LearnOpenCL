@@ -47,7 +47,7 @@ int output_device_info(cl_device_id device_id)
         printf("Error: Failed to access device name!\n");
         return EXIT_FAILURE;
     }
-    printf(" \n Device is  %s ", device_name);
+    printf("\nDevice is  %s ", device_name);
 
     err = clGetDeviceInfo(device_id, CL_DEVICE_TYPE, sizeof(device_type),
                           &device_type, NULL);

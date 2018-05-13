@@ -22,32 +22,6 @@ extern char *getKernelSource(const char *filename);
 
 #define TOL (0.001)   // tolerance used in floating point comparisons
 #define LENGTH (2048) // length of vectors a, b, and c
-
-//------------------------------------------------------------------------------
-//
-// kernel:  vadd
-//
-// Purpose: Compute the elementwise sum c = a+b
-//
-// input: a and b float vectors of length count
-//
-// output: c float vector of length count holding the sum a + b
-//
-
-// const char *KernelSource =
-//     "\n"
-//     "__kernel void vadd(                                                 \n"
-//     "   __global float* a, \n" "   __global float* b,
-//     \n" "   __global float* c,
-//     \n" "   const unsigned count)
-//     \n"
-//     "{ \n" "   int i = get_global_id(0);
-//     \n" "   if(i < count)
-//     \n" "       c[i] = a[i] + b[i];
-//     \n"
-//     "} \n"
-//     "\n";
-
 //------------------------------------------------------------------------------
 
 int main(int argc, char **argv)
