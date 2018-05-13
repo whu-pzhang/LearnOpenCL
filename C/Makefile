@@ -17,7 +17,7 @@ endif
 
 CFLAGS += -D DEVICE=$(DEVICE)
 
-vadd: vadd.c wtime.c device_info.c getKernelSource.c
+vadd: vadd.c util.c
 	$(CC) $^ $(CCFLAGS) $(LIBS) -o $@
 
 

@@ -8,29 +8,29 @@
 
 int main(int argc, char const *argv[])
 {
-    cl_uint platformNums;
+    cl_uint num_platforms;
     /* find the number of OpenCL platforms */
-    clGetPlatformIDs(0, NULL, &platformNums);
-    if (platformNums == 0) {
+    clGetPlatformIDs(0, NULL, &num_platforms);
+    if (num_platforms == 0) {
         printf("Found 0 platforms!\n");
         return EXIT_FAILURE;
     }
 
     // Create a list of platform IDs
-    cl_platform_id platform[platformNums];
-    clGetPlatformIDs(platformNums, platform, NULL);
+    cl_platform_id platform[num_platforms];
+    clGetPlatformIDs(num_platforms, platform, NULL);
 
-    printf("\nNumber of OpenCL platforms: %d\n", platformNums);
+    printf("\nNumber of OpenCL platforms: %d\n", num_platforms);
     printf("\n---------------------------------\n");
 
-    const char *platformAttrName[] = {"Platform", "Vendor", "Version",
+    const char *platform_attribute_name[] = {"Platform", "Vendor", "Version",
                                       "Profile", "Extensions"};
-    const cl_platform_info platformAttrType[] = {
+    const cl_platform_info platform_attribute_type[] = {
         CL_PLATFORM_NAME, CL_PLATFORM_VENDOR, CL_PLATFORM_VERSION,
         CL_PLATFORM_PROFILE, CL_PLATFORM_EXTENSIONS};
-    size_t platformAttrCount = sizeof(platformAttrName) / sizeof(char *);
+    size_t num_platform_attributes = sizeof(platform_attribute_name) / sizeof(char *);
 
-    const char *deviceAttrName[] = {"Name",
+    const char *device_attribure_name[] = {"Name",
                                     "Version",
                                     "Max. Compute units",
                                     "Max Work-group size",
@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
                                     "Max. Alloc size"};
     // "Max. work-group size",
     // "Max. work-item dimensions"};
-    const cl_device_info deviceAttrType[] = {CL_DEVICE_NAME,
+    const cl_device_info device_attribure_type[] = {CL_DEVICE_NAME,
                                              CL_DEVICE_OPENCL_C_VERSION,
                                              CL_DEVICE_MAX_COMPUTE_UNITS,
                                              CL_DEVICE_MAX_WORK_GROUP_SIZE,
@@ -51,54 +51,55 @@ int main(int argc, char const *argv[])
     // CL_DEVICE_MAX_WORK_GROUP_SIZE,
     // CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS,
     // CL_DEVICE_MAX_WORK_ITEM_SIZES};
-    size_t deviceAttrCount = sizeof(deviceAttrName) / sizeof(char *);
+    size_t num_device_attribures =
+        sizeof(device_attribure_name) / sizeof(char *);
 
-    for (int i = 0; i < platformNums; ++i) {
+    for (int i = 0; i < num_platforms; ++i) {
         // get platform attribute value size
         size_t infoSize;
         char *info;
-        for (int j = 0; j < platformAttrCount; ++j) {
-            clGetPlatformInfo(platform[i], platformAttrType[j], 0, NULL,
+        for (int j = 0; j < num_platform_attributes; ++j) {
+            clGetPlatformInfo(platform[i], platform_attribute_type[j], 0, NULL,
                               &infoSize);
             info = (char *)malloc(sizeof(char) * infoSize);
-            clGetPlatformInfo(platform[i], platformAttrType[j], infoSize, info,
+            clGetPlatformInfo(platform[i], platform_attribute_type[j], infoSize, info,
                               NULL);
-            printf("  %d.%d %-11s:%s\n", i + 1, j + 1, platformAttrName[j],
+            printf("  %d.%d %-11s:%s\n", i + 1, j + 1, platform_attribute_name[j],
                    info);
             free(info);
         }
 
         // Count the number of devices in the platform
-        cl_uint devicesNum;
-        clGetDeviceIDs(platform[i], CL_DEVICE_TYPE_ALL, 0, NULL, &devicesNum);
+        cl_uint num_devices;
+        clGetDeviceIDs(platform[i], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices);
 
         // Get devices IDs
-        cl_device_id device[devicesNum];
-        clGetDeviceIDs(platform[i], CL_DEVICE_TYPE_ALL, devicesNum, device,
+        cl_device_id device[num_devices];
+        clGetDeviceIDs(platform[i], CL_DEVICE_TYPE_ALL, num_devices, device,
                        NULL);
         printf("---------------------------------\n");
-        printf("Number of devices: %d\n", devicesNum);
+        printf("Number of devices: %d\n", num_devices);
 
         // Investigate each device
-        for (int j = 0; j < devicesNum; ++j) {
+        for (int j = 0; j < num_devices; ++j) {
             printf("\t----------------------------------------------------\n");
             // Get device info
-            for (int k = 0; k < deviceAttrCount; ++k) {
+            for (int k = 0; k < num_device_attribures; ++k) {
                 if (k < 2) { // string attributes
-                    clGetDeviceInfo(device[j], deviceAttrType[k], 0, NULL,
+                    clGetDeviceInfo(device[j], device_attribure_type[k], 0, NULL,
                                     &infoSize);
                     info = (char *)malloc(sizeof(char) * infoSize);
-                    clGetDeviceInfo(device[j], deviceAttrType[k], infoSize,
+                    clGetDeviceInfo(device[j], device_attribure_type[k], infoSize,
                                     info, NULL);
                     printf("\t%d.%d.%d %-18s: %s\n", i + 1, j + 1, k + 1,
-                           deviceAttrName[k], info);
+                           device_attribure_name[k], info);
                     free(info);
                 } else { // memory attribute
                     cl_ulong memSize;
-                    clGetDeviceInfo(device[j], deviceAttrType[k],
+                    clGetDeviceInfo(device[j], device_attribure_type[k],
                                     sizeof(cl_ulong), &memSize, NULL);
                     printf("\t%d.%d.%d %-18s: %llu", i + 1, j + 1, k + 1,
-                           deviceAttrName[k], memSize);
+                           device_attribure_name[k], memSize);
                     printf(k < 4 ? " \n" : " Bytes\n");
                 }
             }

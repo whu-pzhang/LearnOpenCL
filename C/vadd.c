@@ -8,6 +8,8 @@
 #include <CL/cl.h>
 #endif
 
+#include "util.h"
+
 // pick up device type from compiler command line or from
 // the default type
 #ifndef DEVICE
@@ -15,8 +17,8 @@
 #endif
 
 extern double wtime(); // returns time since some fixed past point (wtime.c)
-extern int output_device_info(cl_device_id);
-extern char *getKernelSource(const char *filename);
+extern int OutputDeviceInfo(cl_device_id);
+extern char *LoadKernelProgram(const char *filename);
 
 //------------------------------------------------------------------------------
 
@@ -74,7 +76,7 @@ int main(int argc, char **argv)
         }
     }
 
-    err = output_device_info(device_id);
+    err = OutputDeviceInfo(device_id);
 
     // Create a compute context
     context = clCreateContext(0, 1, &device_id, NULL, NULL, &err);
@@ -83,7 +85,7 @@ int main(int argc, char **argv)
     commands = clCreateCommandQueue(context, device_id, 0, &err);
 
     // Create the compute program from the source buffer
-    char *KernelSource = getKernelSource("../vadd.cl");
+    char *KernelSource = LoadKernelProgram("../vadd.cl");
     cl_program program;
     program = clCreateProgramWithSource(
         context, 1, (const char **)&KernelSource, NULL, &err);

@@ -29,7 +29,7 @@
 #include <cstdio>
 #endif
 
-const char *err_code(cl_int err_in)
+const char *ErrCode(cl_int err_in)
 {
     switch (err_in) {
     case CL_SUCCESS:
@@ -138,14 +138,14 @@ const char *err_code(cl_int err_in)
     }
 }
 
-void check_error(cl_int err, const char *operation, char *filename, int line)
+void CheckError(cl_int err, const char *operation, char *filename, int line)
 {
     if (err != CL_SUCCESS) {
         fprintf(stderr, "Error during operation '%s', ", operation);
         fprintf(stderr, "in '%s' on line %d\n", filename, line);
-        fprintf(stderr, "Error code was \"%s\" (%d)\n", err_code(err), err);
+        fprintf(stderr, "Error code was \"%s\" (%d)\n", ErrCode(err), err);
         exit(EXIT_FAILURE);
     }
 }
 
-#define checkError(E, S) check_error(E, S, __FILE__, __LINE__)
+#define CHECK_ERROR(E, S) CheckError(E, S, __FILE__, __LINE__)
