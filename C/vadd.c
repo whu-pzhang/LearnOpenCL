@@ -126,7 +126,7 @@ int main(int argc, char **argv)
     err = clSetKernelArg(ko_vadd, 0, sizeof(cl_mem), &d_a);
     err |= clSetKernelArg(ko_vadd, 1, sizeof(cl_mem), &d_b);
     err |= clSetKernelArg(ko_vadd, 2, sizeof(cl_mem), &d_c);
-    err |= clSetKernelArg(ko_vadd, 3, sizeof(unsigned int), &count);
+    err |= clSetKernelArg(ko_vadd, 3, sizeof(unsigned), &count);
 
     double start = wtime();
     // Execute the kernel over the entire range of our 1d input data set
