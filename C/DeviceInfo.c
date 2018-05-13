@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
     checkError(err, "Getting platforms");
 
     printf("\nNumber of OpenCL platforms: %d\n", platformNums);
-    printf("\n---------------------------------\n");
+    printf("---------------------------------\n");
 
     // Investigate each platform
     for (int i = 0; i < platformNums; ++i) {
@@ -71,15 +71,19 @@ int main(int argc, char const *argv[])
             printf("\t\tName: %s\n", string);
 
             // Get device OpenCL version
-            err = clGetDeviceInfo(device[j], CL_DEVICE_OPENCL_C_VERSION,
-                                  sizeof(string), string, NULL);
-            checkError(err, "Getting device OpenCL C version");
-            printf("\t\tDevice Version: %s\n", string);
-
-            err = clGetDeviceInfo(device[i], CL_DEVICE_VERSION, sizeof(string),
+            err = clGetDeviceInfo(device[j], CL_DEVICE_VERSION, sizeof(string),
                                   string, NULL);
+            checkError(err, "Getting device OpenCL C version");
+            printf("\t\tHardware Version: %s\n", string);
+
+            clGetDeviceInfo(device[j], CL_DRIVER_VERSION, sizeof(string),
+                            string, NULL);
+            printf("\t\tDriver version: %s\n", string);
+
+            err = clGetDeviceInfo(device[i], CL_DEVICE_OPENCL_C_VERSION,
+                                  sizeof(string), string, NULL);
             checkError(err, "Getting device version");
-            printf("\t\tSoftware Version: %s\n", string);
+            printf("\t\tOpenCL C Version: %s\n", string);
 
             // Get Max. Compute Units
             cl_uint num;
