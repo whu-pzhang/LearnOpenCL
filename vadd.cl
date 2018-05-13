@@ -8,7 +8,7 @@
 __kernel void vadd(__global const float *a, __global const float *b,
                    __global float *c, const unsigned len)
 {
-    int gid = get_global_id(0);
+    unsigned gid = get_global_id(0);
     if (gid < len)
         c[gid] = a[gid] + b[gid];
 }
